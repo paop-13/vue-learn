@@ -1,17 +1,56 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img @mouseenter="changeStatus('open')" alt="Vue logo" src="./assets/logo.png">
+    <div>
+      <button @click="changeStatus('all')">all</button>
+      <button @click="changeStatus('open')">open</button>
+      <button @click="changeStatus('close')">close</button>
+    </div>
+    <Sample 
+      v-for="item in filteredItems"
+      :key="item.id"
+      :message="item.message"
+      :number="item.number"
+    />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Sample from './components/Sample'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Sample
+  },
+  data(){
+    return {
+      currentStatus: "all",
+      items: [{
+        id: 1,
+        message: "hoge",
+        number: 1,
+        status: "open"
+      },{
+        id: 2,
+        message: "hoo",
+        number: 2,
+        status: "close"
+      }]
+    }
+  },
+  methods: {
+    changeStatus(status) {
+      this.currentStatus = status
+    }
+  },
+  computed: {
+    filteredItems() {
+      if (this.currentStatus === "all") {
+        return this.items
+      }
+      return this.items.filter(item => item.status === this.currentStatus)
+    }
   }
 }
 </script>
